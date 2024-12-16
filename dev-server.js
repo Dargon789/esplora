@@ -5,10 +5,20 @@ import glob from 'glob'
 import express from 'express'
 import browserify from 'browserify-middleware'
 import cssjanus from 'cssjanus'
+import RateLimit from 'express-rate-limit'
 
 const rpath = p => pathu.join(__dirname, p)
 
 const app = express()
+
+// set up rate limiter: maximum of 100 requests per 15 minutes
+const limiter = RateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // max 100 requests per windowMs
+})
+
+// apply rate limiter to all requests
+app.use(limiter)
 
 app.engine('pug', pug.__express)
 
