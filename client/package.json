@@ -10,7 +10,7 @@
   "dependencies": {
     "@babel/plugin-transform-react-jsx": "^7.12.11",
     "@babel/polyfill": "^7.12.1",
-    "@cycle/dom": "^22.8.0",
+    "@cycle/dom": "^23.1.0",
     "@cycle/history": "^7.4.0",
     "@cycle/html": "^3.4.0",
     "@cycle/http": "^15.4.0",
