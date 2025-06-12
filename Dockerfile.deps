@@ -12,7 +12,7 @@ RUN sh -c '[ -n "$NO_LIQUID" ] && mkdir -p /wally/wally_dist || ( \
     && git submodule sync --recursive && git submodule update --init --recursive \
     && ./tools/build_wasm.sh --enable-elements)'
 
-FROM debian:bookworm-slim
+FROM debian:12.11-slim
 SHELL ["/bin/bash", "-c"]
 
 ENV CORE_BUILD_DEPS="autoconf autotools-dev automake libtool pkg-config bsdmainutils build-essential"
