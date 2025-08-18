@@ -34,6 +34,6 @@
     "snabbdom-to-html": "^6.0.0",
     "typeface-inconsolata": "1.1.13",
     "uglify-es": "^3.3.9",
-    "express-rate-limit": "^7.5.0"
+    "express-rate-limit": "^8.0.1"
   }
 }
