@@ -43,7 +43,7 @@ export default ({ t, tx, tipHeight, spends, openTx, page, unblinded, ...S }) => 
     </div>
     <div className="container">
       {txHeader(tx, { t, tipHeight, ...S })}
-      {(unblinded && unblinded.error) ? <div className="text-center text-danger mt-3">{t`Warning:`} {unblinded.error}</div> : <div></div>}
+      {(unblinded && unblinded.error) ? <div className="text-center text-danger mt-3">{t`Warning:`} {unblinded.error.toString()}</div> : <div></div>}
       {txBox(tx, { openTx, tipHeight, t, spends, query: page.query, ...S })}
     </div>
   </div>
@@ -140,9 +140,9 @@ const txHeader = (tx, { tipHeight, mempool, feeEst, t
     { feerate != null && <div>
       <div>{t`Transaction fees`}</div>
       <div>
-        <span className="amount">{t`${formatSat(tx.fee)} (${feerate.toFixed(1)} sat/vB)`}</span>
+        <span className="amount">{t`${formatSat(tx.fee)} (${feerate.toFixed(2)} sat/vB)`}</span>
         { overpaying > OVERPAYMENT_WARN &&
-          <p className={`text-${ overpaying > OVERPAYMENT_WARN*1.5 ? 'danger' : 'warning' } mb-0`} title={t`compared to bitcoind's suggested fee of ${feeEst[2].toFixed(1)} sat/vB for confirmation within 2 blocks`}>
+          <p className={`text-${ overpaying > OVERPAYMENT_WARN*1.5 ? 'danger' : 'warning' } mb-0`} title={t`compared to the suggested fee of ${feeEst[2].toFixed(1)} sat/vB for confirmation within 2 blocks`}>
             ⓘ {t`overpaying by ${Math.round((overpaying-1)*100)}%`}
           </p>
         }
@@ -161,6 +161,14 @@ const txHeader = (tx, { tipHeight, mempool, feeEst, t
       <div>{t`Weight units`}</div>
       <div>{`${formatNumber(tx.weight)} WU`}</div>
     </div>
+    { tx.discount_vsize != null && <div>
+      <div>{t`Discount virtual size`}</div>
+      <div>{`${formatNumber(tx.discount_vsize)} vB`}</div>
+    </div> }
+    { tx.discount_weight != null && <div>
+      <div>{t`Discount weight units`}</div>
+      <div>{`${formatNumber(tx.discount_weight)} WU`}</div>
+    </div> }
     <div>
       <div>{t`Version`}</div>
       <div>{tx.version}</div>

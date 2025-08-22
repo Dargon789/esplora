@@ -5,10 +5,10 @@ ARG NO_LIQUID
 ENV EXPORTED_FUNCTIONS="['_malloc', '_free', '_wally_init','_wally_asset_value_commitment','_wally_asset_generator_from_bytes']"
 ENV EXTRA_EXPORTED_RUNTIME_METHODS="['getValue', 'ccall']"
 ENV EMCC_OPTIONS="-s MODULARIZE=1 -s EXPORT_NAME=InitWally"
-RUN sh -c '[ -n "$NO_LIQUID" ] && mkdir -p /wally/wally_dist || ( \
+RUN sh -c '[ -n "$NO_LIQUID" ] && mkdir -p /wally/dist || ( \
     cd /opt/emsdk && . ./emsdk_env.sh \
     && git clone --no-checkout https://github.com/elementsproject/libwally-core /wally \
-    && cd /wally && git checkout ea984fc07f4f450b33d4eb78756f25f553e60b44 \
+    && cd /wally && git checkout f394af85081cbebea50f470373a89f77ad52cb94 \
     && git submodule sync --recursive && git submodule update --init --recursive \
     && ./tools/build_wasm.sh --enable-elements)'
 
@@ -29,12 +29,12 @@ RUN git clone --quiet --depth 1 --single-branch --branch v0.40.1 https://github.
  && nvm install v18.20.4
 
 ARG TARGETARCH
-ENV SHA256SUM_ELEMENTS_X86_64="d1c0919955a1d50f2f1518e2ee27aa21fd5dd45cd481635d59fa453ff776dede"
-ENV SHA256SUM_ELEMENTS_ARM64="b6345394020486f7f8af111e2063f355571488cd8e8f384ed1082606c94e6c0d"
-ENV SHA256SUM_BITCOINCORE_X86_64="2a6974c5486f528793c79d42694b5987401e4a43c97f62b1383abf35bcee44a8"
-ENV SHA256SUM_BITCOINCORE_ARM64="cb35e250ae9d0328aa90e7aad0b877ed692597420a1092e8ab1a5dd756209722"
+ENV SHA256SUM_ELEMENTS_X86_64="86e3061a6cb82ea979954d7b187442b6a104648c26bda2ddf297e513b5d53c51"
+ENV SHA256SUM_ELEMENTS_ARM64="e44566fad37cb632fa7b4d288e6e20fb3af26745a20950da8c55997ad427e05c"
+ENV SHA256SUM_BITCOINCORE_X86_64="acc223af46c178064c132b235392476f66d486453ddbd6bca6f1f8411547da78"
+ENV SHA256SUM_BITCOINCORE_ARM64="154c9b9e6e17136edc8f20fda5d252fb339e727e4a85ef49e7d8facb9085f2d3"
 
-ENV VERSION_BITCOINCORE=27.0
+ENV VERSION_BITCOINCORE=27.2
 RUN if [ "${TARGETARCH}" = "arm64" ]; then \
    curl -sL -o bitcoin.tar.gz "https://bitcoincore.org/bin/bitcoin-core-${VERSION_BITCOINCORE}/bitcoin-${VERSION_BITCOINCORE}-aarch64-linux-gnu.tar.gz"; \
    echo "${SHA256SUM_BITCOINCORE_ARM64}  bitcoin.tar.gz" | sha256sum --check; \
@@ -46,7 +46,7 @@ RUN if [ "${TARGETARCH}" = "arm64" ]; then \
  && ln -s "/srv/explorer/bitcoin-${VERSION_BITCOINCORE}" /srv/explorer/bitcoin \
  && rm bitcoin.tar.gz
 
-ENV VERSION_ELEMENTS=23.2.3
+ENV VERSION_ELEMENTS=23.2.7
 RUN if [ "${TARGETARCH}" = "arm64" ]; then \
    curl -sL -o elements.tar.gz "https://github.com/ElementsProject/elements/releases/download/elements-${VERSION_ELEMENTS}/elements-${VERSION_ELEMENTS}-aarch64-linux-gnu.tar.gz"; \
    echo "${SHA256SUM_ELEMENTS_ARM64}  elements.tar.gz" | sha256sum --check; \
@@ -89,4 +89,4 @@ RUN apt-get --auto-remove remove -yqq --purge ${ESPLORA_BUILD_DEPS} manpages ${C
  && apt-get autoclean \
  && rm -rf /usr/share/doc* /usr/share/man /usr/share/postgresql/*/man /var/lib/apt/lists/* /var/cache/* /tmp/* /root/.cache /*.deb /root/.cargo
 
-COPY --from=libwally-wasm /wally/wally_dist /srv/wally_wasm
+COPY --from=libwally-wasm /wally/dist /srv/wally_wasm
