@@ -1,6 +1,6 @@
 FROM blockstream/esplora-base:latest AS build
 
-FROM debian:12.11-slim
+FROM debian:12.13-slim
 
 COPY --from=build /srv/explorer /srv/explorer
 COPY --from=build /srv/wally_wasm /srv/wally_wasm
